@@ -15,34 +15,34 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * Class allowing to create sounds and play them. It is not intended to play musics.
  */
 public class Sound {
-	
+
 	/**
-	 * The sound clip instace
+	 * The sound clip instance
 	 */
-	private Clip clip;
+	protected final Clip clip;
 
 	/**
 	 * True if the sound must loop, false otherwise
 	 */
-	private boolean isLooping;
+	protected boolean isLooping;
 
 	/**
 	 * Creates and loads the sound
 	 * @param path the path to the sound asset
-	 * @throws IOException 
-	 * @throws UnsupportedAudioFileException 
-	 * @throws LineUnavailableException 
+	 * @throws IOException
+	 * @throws UnsupportedAudioFileException
+	 * @throws LineUnavailableException
 	 */
-	public Sound(String path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		BufferedInputStream bis = new BufferedInputStream(getClass().getResourceAsStream(path));
+	public Sound(final String path) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+		final BufferedInputStream bis = new BufferedInputStream(getClass().getResourceAsStream(path));
 		AudioInputStream inputStream;
 		inputStream = AudioSystem.getAudioInputStream(bis);
-		
-		AudioFormat format = inputStream.getFormat();
-		DataLine.Info info = new DataLine.Info(Clip.class, format);
+
+		final AudioFormat format = inputStream.getFormat();
+		final DataLine.Info info = new DataLine.Info(Clip.class, format);
 		clip = (Clip) AudioSystem.getLine(info);
 		clip.open(inputStream);
-		
+
 		isLooping = false;
 	}
 
@@ -53,18 +53,18 @@ public class Sound {
 	public boolean isPlaying() {
 		return clip.isRunning();
 	}
-	
+
 	/**
 	 * @return true if the sound must loop, false otherwise
 	 */
 	public boolean isLooping() {
 		return isLooping;
 	}
-	
+
 	/**
 	 * @param isLooping true if the sound must loop, false otherwise
 	 */
-	public void setLooping(boolean isLooping) {
+	public void setLooping(final boolean isLooping) {
 		this.isLooping = isLooping;
 	}
 
@@ -74,10 +74,10 @@ public class Sound {
 	 */
 	public void play() {
 		clip.setFramePosition(0);
-		
-		int loopCount = this.isLooping() ? Clip.LOOP_CONTINUOUSLY : 0;
+
+		final int loopCount = this.isLooping() ? Clip.LOOP_CONTINUOUSLY : 0;
 		clip.loop(loopCount);
 	}
-	
+
 }
 
