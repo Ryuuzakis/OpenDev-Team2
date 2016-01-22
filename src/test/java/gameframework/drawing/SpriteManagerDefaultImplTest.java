@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SpriteManagerDefaultImplTest {
 
-	SpriteManagerDefaultImpl manager;
+	SpriteManagerDefaultImpl manager, managerRectangle;
 	int maxSpriteNumber = 6;
 	int renderingSize = 16;
 	int spriteSize = 16;
@@ -55,6 +55,11 @@ public class SpriteManagerDefaultImplTest {
 				maxSpriteNumber);
 		manager.setTypes("foo", "bar");
 	}
+	
+	public void createManagerRectangle() {
+		managerRectangle = new SpriteManagerDefaultImpl(image, maxSpriteNumber);
+		managerRectangle.setTypes("foo", "bar");
+	}
 
 	@Before
 	public void createObjects() {
@@ -62,11 +67,13 @@ public class SpriteManagerDefaultImplTest {
 		createImage();
 		createGraphics();
 		createManager();
+		createManagerRectangle();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void validTypeRequired() {
 		manager.setType("neither foo nor bar");
+		managerRectangle.setType("neither foo nor bar");
 	}
 
 	@Test
@@ -81,6 +88,19 @@ public class SpriteManagerDefaultImplTest {
 		assertEquals(0, actualSourceX);
 		assertEquals(spriteSize, actualSourceY);
 	}
+	
+	@Test
+	public void typeImpactRowManagerRectangle() throws Exception {
+		managerRectangle.setType("foo");
+		managerRectangle.draw(graphics, new Point(0, 0));
+		assertEquals(0, actualSourceX);
+		assertEquals(0, actualSourceY);
+
+		managerRectangle.setType("bar");
+		managerRectangle.draw(graphics, new Point(0, 0));
+		assertEquals(0, actualSourceX);
+		assertEquals(image.getHeight(), actualSourceY);
+	}
 
 	@Test
 	public void incrementImpactColumn() throws Exception {
@@ -91,6 +111,19 @@ public class SpriteManagerDefaultImplTest {
 
 		manager.increment();
 		manager.draw(graphics, new Point(0, 0));
+		assertEquals(spriteSize, actualSourceX);
+		assertEquals(0, actualSourceY);
+	}
+	
+	@Test
+	public void incrementImpactColumnForRectangle() throws Exception {
+		managerRectangle.setType("foo");
+		managerRectangle.draw(graphics, new Point(0, 0));
+		assertEquals(0, actualSourceX);
+		assertEquals(0, actualSourceY);
+
+		managerRectangle.increment();
+		managerRectangle.draw(graphics, new Point(0, 0));
 		assertEquals(spriteSize, actualSourceX);
 		assertEquals(0, actualSourceY);
 	}
@@ -108,6 +141,20 @@ public class SpriteManagerDefaultImplTest {
 		assertEquals(0, actualSourceX);
 		assertEquals(0, actualSourceY);
 	}
+	
+	@Test
+	public void resetSetsColumnTo0ForRectangle() throws Exception {
+		managerRectangle.setType("foo");
+		managerRectangle.increment();
+		managerRectangle.draw(graphics, new Point(0, 0));
+		assertEquals(spriteSize, actualSourceX);
+		assertEquals(0, actualSourceY);
+
+		managerRectangle.reset();
+		managerRectangle.draw(graphics, new Point(0, 0));
+		assertEquals(0, actualSourceX);
+		assertEquals(0, actualSourceY);
+	}
 
 	@Test
 	public void setIncrementChangesColumn() throws Exception {
@@ -116,6 +163,16 @@ public class SpriteManagerDefaultImplTest {
 		manager.setType("foo");
 		manager.setIncrement(column);
 		manager.draw(graphics, new Point(0, 0));
+		assertEquals(column * spriteSize, actualSourceX);
+	}
+	
+	@Test
+	public void setIncrementChangesColumnForRectangle() throws Exception {
+		int column = 3;
+
+		managerRectangle.setType("foo");
+		managerRectangle.setIncrement(column);
+		managerRectangle.draw(graphics, new Point(0, 0));
 		assertEquals(column * spriteSize, actualSourceX);
 	}
 

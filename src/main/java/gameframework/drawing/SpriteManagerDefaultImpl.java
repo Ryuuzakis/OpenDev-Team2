@@ -14,18 +14,40 @@ public class SpriteManagerDefaultImpl implements SpriteManager {
 
 	private final DrawableImage image;
 	private Map<String, Integer> types;
-	private final int spriteSize;
+	private final int spriteSizeWidth;
+	private final int spriteSizeHeight;
 	private int spriteNumber = 0;
 	private final int maxSpriteNumber;
 	private int currentRow;
-	private final int renderingSize;
-
+	private final int width;
+	private final int height;
+	
+	
+	// Square
 	public SpriteManagerDefaultImpl(DrawableImage image, int renderingSize,
 			int maxSpriteNumber) {
-		this.renderingSize = renderingSize;
+		this.width = renderingSize;
+		this.height = renderingSize;
 		this.image = image;
 		this.maxSpriteNumber = maxSpriteNumber;
-		this.spriteSize = image.getWidth() / maxSpriteNumber;
+		this.spriteSizeWidth = image.getWidth() / maxSpriteNumber;
+		this.spriteSizeHeight = spriteSizeWidth;
+	}
+	
+	
+	/**
+	 * Keep the height of the image
+	 * 
+	 * @param image
+	 * @param maxSpriteNumber
+	 */
+	public SpriteManagerDefaultImpl(DrawableImage image, int maxSpriteNumber) {
+		this.width = image.getWidth();
+		this.height = image.getHeight();
+		this.spriteSizeWidth = width / maxSpriteNumber;
+		this.spriteSizeHeight = height;
+		this.image = image;
+		this.maxSpriteNumber = maxSpriteNumber;
 	}
 
 	@Override
@@ -43,14 +65,14 @@ public class SpriteManagerDefaultImpl implements SpriteManager {
 		// Destination image coordinates
 		int dx1 = (int) position.getX();
 		int dy1 = (int) position.getY();
-		int dx2 = dx1 + renderingSize;
-		int dy2 = dy1 + renderingSize;
+		int dx2 = dx1 + width;
+		int dy2 = dy1 + height;
 
 		// Source image coordinates
-		int sx1 = spriteNumber * spriteSize;
-		int sy1 = currentRow * spriteSize;
-		int sx2 = sx1 + spriteSize;
-		int sy2 = sy1 + spriteSize;
+		int sx1 = spriteNumber * spriteSizeWidth;
+		int sy1 = currentRow * spriteSizeHeight;
+		int sx2 = sx1 + spriteSizeWidth;
+		int sy2 = sy1 + spriteSizeHeight;
 		g.drawImage(image.getImage(), dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2,
 				null);
 	}
