@@ -1,5 +1,6 @@
 package gameframework.drawing;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -54,4 +55,6 @@ public interface SpriteManager {
 	 */
 	void setIncrement(int increment);
 
+	
+	void tintSprite(Color color);
 }

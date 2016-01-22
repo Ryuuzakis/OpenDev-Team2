@@ -1,5 +1,6 @@
 package gameframework.drawing;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashMap;
@@ -77,5 +78,10 @@ public class SpriteManagerDefaultImpl implements SpriteManager {
 	@Override
 	public void setIncrement(int increment) {
 		this.spriteNumber = increment;
+	}
+
+	@Override
+	public void tintSprite(Color color) {
+		image.tint(color);
 	}
 }

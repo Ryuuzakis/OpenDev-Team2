@@ -1,9 +1,12 @@
 package gameframework.drawing;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class DrawableImage implements Drawable {
@@ -60,5 +63,15 @@ public class DrawableImage implements Drawable {
 
 	public int getHeight() {
 		return getImage().getHeight(null);
+	}
+
+	public void tint(Color color) {
+		BufferedImage img = new BufferedImage(image.getWidth(null), image.getHeight(null),
+				BufferedImage.TRANSLUCENT);
+		Graphics2D graphics = img.createGraphics(); 
+		graphics.setXORMode(color);
+		graphics.drawImage(image, 0, 0, null);
+		graphics.dispose();	
+		this.image = img;
 	}
 }
